@@ -1,0 +1,53 @@
+﻿<Page x:Class="AirportProject.View.User.MainPageUser"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AirportProject.View.User"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AMONIC Airlines Automation System">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.04*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="Exit" Command="{Binding Path=ExitCommand}"></MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition/>
+                <RowDefinition Height="0.1*"/>
+
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Margin="10 0 0 0" HorizontalAlignment="Left" Text="{Binding Path=FirstName}"></TextBlock>
+
+                <Grid Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  Text="{Binding Path=TimeSpent}"></TextBlock>
+                    <TextBlock Text="{Binding Path=NumberCrush}" Grid.Column="1"></TextBlock>
+                </Grid>
+            </Grid>
+            <DataGrid Grid.Row="1" Margin="10" IsReadOnly="True" AutoGenerateColumns="False" AlternatingRowBackground="Yellow" ItemsSource="{Binding ListLogoutsUsers}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Date" Binding="{Binding Path=Date}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Header="Login time" Binding="{Binding Path=LoginTime}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Header="Logout time" Binding="{Binding Path=LogoutTime}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Header="Time spent on system" Binding="{Binding Path=TimeSpent}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Header="Unsuccessful logout reason" Binding="{Binding Path=ProblemExit}"></DataGridTextColumn>
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Page>

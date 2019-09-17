@@ -1,0 +1,113 @@
+﻿<Page x:Class="AirportProject.View.Administrator.PagePurchaseAmenities"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AirportProject.View.Administrator"
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="700"
+      Title="Purchase Amenities">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="{Binding Path=HeightSelectedSchedule}"/>
+            <RowDefinition Height="{Binding Path=HeightListAmenities}"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <GroupBox Style="{StaticResource StyleGroupBoxText}" Header="Booking reference" Margin="20 0 0 0">
+                <TextBox Text="{Binding Path=SearchBookingReference, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            </GroupBox>
+            <GroupBox  Margin="10 10 0 0" ToolTip="Заполните текстовое поле в формате: NCADIG" Style="{StaticResource StyleGroupBoxButton}">
+                <Button Command="{Binding Path=SearchCommand}" >OK</Button>
+            </GroupBox>
+            <GroupBox Style="{StaticResource StyleGroupBoxButton}" Margin="150 10 0 0">
+                <Button Command="{Binding Path=ExitCommand}"  >Exit</Button>
+            </GroupBox>
+            
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+
+                <RowDefinition/>
+
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row="0" BorderBrush="Black" Header="Flight list" Margin="20 0 20 0">
+                <StackPanel Orientation="Horizontal">
+                    <GroupBox Width="300" Style="{StaticResource StyleGroupBoxText}" Margin="20 0 0 0" Header="Choose your flight">
+                        <ComboBox ItemsSource="{Binding Path=ListFlight}" DisplayMemberPath="Name" IsEnabled="False" SelectedItem="{Binding Path=SelectedSchedule}"></ComboBox>
+                    </GroupBox>
+                    <GroupBox Style="{StaticResource StyleGroupBoxButton}" Margin="20 10 0 0" Width="150">
+                        <Button   Command="{Binding Path=ShowAmenitiesCommand}">Show Amenities</Button>
+                    </GroupBox>
+                </StackPanel>
+            </GroupBox>
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <TextBlock Margin="20 0 0 0" Text="{Binding Path=FullName , StringFormat='Full name: {0}'}"></TextBlock>
+                <TextBlock Margin="20 0 0 0" Text="{Binding Path=CurrentTicket.PassportNumber, StringFormat='Passport number: {0}'}"></TextBlock>
+                <TextBlock Margin="20 0 0 0" Text="{Binding Path=CurrentTicket.CabinTypes.Name, StringFormat='Your cabin class is: {0}'}"></TextBlock>
+            </StackPanel>
+        </Grid>
+              
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.3*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row="0" Header="AMONIC Airlines Amenities" BorderBrush="Black" Margin="20 0 20 0">
+                <ListBox Margin="100 0 100 0" SelectedItem="{Binding Path=SelectedService , UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Path=ListAmenities}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Service.Amenities.ID}" Value="7">
+
+                                    <Setter Property="IsEnabled"  Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=Service.Amenities.ID}" Value="11">
+                                  
+                                    <Setter Property="IsEnabled"  Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel Orientation="Horizontal" >
+                                <CheckBox IsChecked="{Binding Path=SelectedAmenities, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=Service.Amenities.Service}" Margin="10 0 0 0"></TextBlock>
+                                        <TextBlock Text="{Binding Path=Service.Amenities.Price , StringFormat='(${0:0})'}" Margin="40 0 0 0"></TextBlock>
+                                    </StackPanel>
+                                </CheckBox>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Left" Margin="20 0 40 0" Text="{Binding Path=ItemsSelected , StringFormat='Items selected: ${0:0}'}"></TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="20 0 40 0" Text="{Binding Path=DutiesAndTaxes , StringFormat='Duties and taxes: ${0:0}'}"></TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="20 0 40 0" Text="{Binding Path=TotalPayable, StringFormat='Total payable: ${0:0}'}"></TextBlock>
+                </StackPanel>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                    </Grid.RowDefinitions>
+                    <GroupBox Style="{StaticResource StyleGroupBoxButton}" Width="200">
+                        <Button Command="{Binding Path=SaveCommand}" >Save and Confirm</Button>
+                    </GroupBox>
+                </Grid>
+            </Grid>
+        </Grid>
+        
+    </Grid>
+</Page>

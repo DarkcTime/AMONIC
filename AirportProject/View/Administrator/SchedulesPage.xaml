@@ -1,0 +1,155 @@
+﻿<Page x:Class="AirportProject.View.Administrator.SchedulesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AirportProject.View.Administrator"
+      mc:Ignorable="d" 
+      d:DesignHeight="500"  d:DesignWidth="800"
+      Title="Manage Flight Schedules">
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="250"/>
+            <RowDefinition Height="{Binding Path=EditScheduleHeight}"/>
+           
+        </Grid.RowDefinitions>
+        
+            <Button Command="{Binding Path=BackCommand}" Width="100" HorizontalAlignment="Right" Margin="0 5 30 0" Height="25">Back</Button>
+       
+        <GroupBox Margin="10 0 10 0" Grid.Row="1"  Header="Filter by" BorderBrush="Black">
+            <ScrollViewer VerticalScrollBarVisibility="Visible" >
+                <WrapPanel Orientation="Horizontal">
+                    <GroupBox Header="From:" Margin="10" Style="{StaticResource StyleGroupBoxText}">
+                        <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding Path=ListAirports}" SelectedItem="{Binding Path=SelectedAirportFrom, UpdateSourceTrigger=PropertyChanged}"/>
+                    </GroupBox>
+                    <GroupBox Header="To:" Margin="10" Style="{StaticResource StyleGroupBoxText}">
+                        <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding Path=ListAirports}" SelectedItem="{Binding Path=SelectedAirportTo, UpdateSourceTrigger=PropertyChanged}"/>
+                    </GroupBox>
+                    <GroupBox Header="Sort by" Margin="10" Style="{StaticResource StyleGroupBoxText}">
+                        <ComboBox ItemsSource="{Binding Path=ListSortBy}" DisplayMemberPath="Name"  SelectedIndex="{Binding Path=IndexTypeFilter , UpdateSourceTrigger=PropertyChanged}" />
+                    </GroupBox>
+                    <GroupBox Header="Outbond" Margin="10" Style="{StaticResource StyleGroupBoxText}">
+                        <TextBox IsReadOnly="False"  IsEnabled="{Binding Path=IsEnableOutbond}" Text="{Binding Path=Outbond , UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </GroupBox>
+                    <GroupBox Header="Flight Number" Margin="10" Style="{StaticResource StyleGroupBoxText}">
+                        <TextBox Text="{Binding Path=FlightNumber, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </GroupBox>
+                    <GroupBox  Style="{StaticResource StyleGroupBoxButton}" Margin="20">
+                        <Button Command="{Binding ApplyCommand}">Apply</Button>
+                    </GroupBox>
+                </WrapPanel>
+            </ScrollViewer>
+        </GroupBox>
+        <DataGrid  Grid.Row="3" Margin="10" IsReadOnly="True" AutoGenerateColumns="False" SelectedItem="{Binding Path=SelectedSchedul}" ItemsSource="{Binding Path=ListSchedules}">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Schedules.Confirmed}" Value="false   ">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Date" Binding="{Binding Path=Date}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Time" Binding="{Binding Path=Time}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="From" Binding="{Binding Path=Schedules.Routes.Airports.Name}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="To" Binding="{Binding Path=Schedules.Routes.Airports1.Name}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Flight Number" Binding="{Binding Path=Schedules.FlightNumber}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Aircraft" Binding="{Binding Path=Schedules.Aircrafts.Name}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Economy price" Binding="{Binding Path=Schedules.EconomyPrice , StringFormat='${0:00}'}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Business price" Binding="{Binding Path=BusinessPrice , StringFormat='${0:00}'}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="First class price" Binding="{Binding Path=FirstClassPrice , StringFormat='${0:00}'}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Edit" Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button  Width="50" Command="{Binding Path=DataContext.EditFlight , RelativeSource={RelativeSource FindAncestor , AncestorType={x:Type DataGrid}}}" >
+                                <Button.Content>
+                                    <Image Height="15" Source="/AirportProject;component/Resource/Edit.PNG"></Image>
+                                </Button.Content>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Cancel" Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="50" Command="{Binding Path=DataContext.CancelCommand , RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                <Button.Content>
+
+                                    <Image Height="15" Source="/AirportProject;component/Resource/Cancel.PNG"></Image>
+                                </Button.Content>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <Button Width="150" IsEnabled="False" Command="{Binding ImportChangeCommnd}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="15" Source="/AirportProject;component/Resource/Update.PNG">
+
+                        </Image>
+                        <TextBlock>Import Change</TextBlock>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+
+        </Grid>
+        <ScrollViewer  Grid.Row="4">
+            <GroupBox BorderBrush="Black" Margin="10 0 10 0" Header="Shedule Edit" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="16"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="0.5*"/>
+                    </Grid.RowDefinitions>
+                    <Button   Command="{Binding Path=CloseCommand}"  Style="{StaticResource StyleButtonClose}">X</Button>
+
+                    <GroupBox Grid.Row="1" Header="Flight route" BorderBrush="Black">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="40 0 0 0" Text="{Binding Path=SelectedSchedul.Schedules.Routes.Airports.Name  , StringFormat='From:{0}'}"></TextBlock>
+                            <TextBlock Margin="40 0 0 0" Text="{Binding Path=SelectedSchedul.Schedules.Routes.Airports1.Name , StringFormat='To:{0}'}"></TextBlock>
+                            <TextBlock Margin="40 0 0 0" Text="{Binding Path=SelectedSchedul.Schedules.EconomyPrice, StringFormat='Aircraft:${0:0}'}"></TextBlock>
+                        </StackPanel>
+                    </GroupBox>
+
+
+
+                    <StackPanel  Grid.Row="2" Orientation="Horizontal">
+                        <GroupBox Margin="20 0 0 0" Header="Date:" Style="{StaticResource StyleGroupBoxText}">
+                            <DatePicker SelectedDate="{Binding Path=SelectedSchedul.Schedules.Date}"></DatePicker>
+                        </GroupBox>
+                        <GroupBox Margin="20 0 0 0" Header="Time:" Style="{StaticResource StyleGroupBoxText}">
+                            <TextBox Text="{Binding Path=SelectedSchedul.Time}"></TextBox>
+                        </GroupBox>
+                        <GroupBox Margin="20 0 0 0 " Header="Economy price:" Style="{StaticResource StyleGroupBoxText}">
+                            <TextBox Text="{Binding Path=SelectedSchedul.Schedules.EconomyPrice}"></TextBox>
+                        </GroupBox>
+                    </StackPanel>
+                    <StackPanel  Orientation="Horizontal" Grid.Row="3">
+                        <GroupBox Style="{StaticResource StyleGroupBoxButton}">
+                            <Button Margin="40 0 0 0" Command="{Binding Path=UpdateCommand}">Update</Button>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </ScrollViewer>
+    </Grid>
+</Page>
